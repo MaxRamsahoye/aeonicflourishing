@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeonic Flourishing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;600&display=swap');
+
+  :root {
+    /* Light Mode Variables */
+    --bg-color: #f8f9fa;
+    --text-primary: #000000; 
+    --text-muted: #000000; 
+    --accent: #000000; 
+    --grass-green: #5eb159; 
+    --dark-grass-green: #3d803b; 
+    --sepia-bg: #f4ebd8; 
+  }
+
+  /* Dark Mode Variables */
+  body.dark-mode {
+    --bg-color: #000000; /* Pure Black Background */
+    --text-primary: #ffffff; 
+    --text-muted: #ffffff; 
+    --accent: #ffffff; 
+    --dark-grass-green: #eab308; /* Golden Yellow */
+    --sepia-bg: #111622; /* Dark Slate reference */
+  }
+
+  body, html { 
+    margin: 0; 
+    padding: 0; 
+    font-family: Baskerville, "Libre Baskerville", "Baskerville Old Face", "Times New Roman", serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-primary); 
+    overflow-x: hidden;
+    transition: background-color 0.6s ease, color 0.6s ease;
+  }
+
+  /* Smooth color transitions for all text and structural elements */
+  section, div, h1, h2, p, span, .dict-word {
+    transition: background-color 0.6s ease, color 0.6s ease;
+  }
+
+  /* Simple Black/White Icon Toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    z-index: 100;
+    background: #ffffff;
+    color: #000000;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+
+  body.dark-mode .theme-toggle {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #333333;
+  }
+
+  /* Global Paragraph Styling */
+  p {
+    font-weight: 400; 
+    line-height: 1.35;
+    margin: 15px 0;
+    color: var(--text-muted); 
+  }
+  
+  /* Hero Section */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-background-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1; 
+    transition: opacity 1s ease-in-out;
+  }
+
+  /* Hero Crossfade Logic */
+  .hero-dark {
+    opacity: 0; 
+  }
+
+  body.dark-mode .hero-light {
+    opacity: 0; 
+  }
+
+  body.dark-mode .hero-dark {
+    opacity: 1; 
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 2rem;
+  }
+
+  .hero h1 {
+    font-family: Baskerville, "Libre Baskerville", "Baskerville Old Face", "Times New Roman", serif; 
+    font-size: 4.5rem;
+    font-weight: 550; /* In-between semi-bold (600) and medium (500) */
+    margin: 0 0 10px 0;
+    line-height: 1.1;
+    color: #ffffff; 
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6); 
+  }
+
+  .hero .subtitle {
+    font-family: Baskerville, "Libre Baskerville", "Baskerville Old Face", "Times New Roman", serif; 
+    font-size: 2.4rem; 
+    font-weight: 550; /* In-between semi-bold (600) and medium (500) */
+    margin: 0;
+    color: #ffffff; 
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Dictionary Section */
+  .dictionary-section {
+    position: relative;
+    z-index: 10;
+    padding: 4rem 2rem; 
+    background-color: var(--sepia-bg); 
+  }
+
+  /* Content Containers */
+  .content-container {
+    max-width: 900px; 
+    margin: auto;
+    text-align: left; 
+    padding-left: 3.5rem; 
+    padding-right: 1rem;
+  }
+
+  .dict-entry {
+    font-style: italic; 
+    margin-bottom: 2.5rem; 
+  }
+
+  .dict-word {
+    font-size: 2.2rem; 
+    font-weight: 500; 
+    color: var(--text-primary);
+    margin: 0;
+    display: inline-block;
+  }
+
+  .dict-phonetics {
+    font-size: 1.1rem; 
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+    font-family: sans-serif; 
+    letter-spacing: 0.05em;
+    font-style: normal; 
+  }
+
+  .dict-type {
+    font-size: 1.1rem; 
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+  }
+
+  .dict-definition {
+    font-size: 1.25rem; 
+    padding-left: 1.5rem; 
+    margin: 10px 0;
+  }
+
+  /* Main Content Layout */
+  .content-section {
+    position: relative;
+    z-index: 10;
+    padding: 4rem 2rem;
+    background: var(--bg-color);
+  }
+
+  /* Text Entries */
+  .text-entry {
+    margin-top: 3.5rem; 
+    padding-top: 1rem;
+  }
+
+  /* Primary Heading Format */
+  .section-title {
+    font-size: 3.2rem; 
+    font-weight: 500; 
+    color: var(--accent);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Subheading Format */
+  .medium-title {
+    position: relative;
+    font-size: 2.4rem; 
+    font-weight: 500; 
+    color: var(--accent);
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  /* Hanging Indent En Dash */
+  .medium-title::before {
+    content: "–"; 
+    position: absolute;
+    left: -3.5rem; 
+    top: 0; 
+    color: var(--dark-grass-green);
+    font-weight: 500;
+  }
+
+  .medium-text {
+    font-size: 1.35rem; 
+  }
+
+  /* Asterisk Dividers */
+  .asterisk-divider {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; 
+    color: var(--dark-grass-green); 
+    letter-spacing: 0.3rem;
+    background-color: var(--bg-color);
+    transition: color 0.6s ease, background-color 0.6s ease;
+  }
+  
+  .asterisk-divider.mid {
+    padding: 1rem 0; 
+  }
+
+  .asterisk-divider.bottom {
+    padding: 4rem 0 6rem 0; 
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Dark Mode Toggle -->
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+  <!-- Moon Icon (for Light Mode) -->
+  <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+  <!-- Sun Icon (for Dark Mode) -->
+  <svg id="icon-sun" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+<!-- Hero Section -->
+<section class="hero">
+  <!-- Day Image -->
+  <img src="Aeonic.jpeg" alt="Aeonic Flourishing (Day)" class="hero-background-img hero-light">
+  <!-- Night Image -->
+  <img src="Aeonic (night).jpeg" alt="Aeonic Flourishing (Night)" class="hero-background-img hero-dark">
+  
+  <div class="hero-content">
+    <h1>Aeonic Flourishing</h1>
+    <p class="subtitle">Towards a Psychological and Ecological Civilisation</p>
+  </div>
+</section>
+
+<!-- Dictionary Section -->
+<section class="dictionary-section">
+  <div class="content-container">
+    
+    <div class="dict-entry" style="margin-bottom: 3.5rem;">
+      <h2 class="dict-word">Aeonic</h2>
+      <span class="dict-phonetics">/iːˈɒn.ɪk/</span>
+      <span class="dict-type">adjective</span>
+      <p class="dict-definition">1. Lasting for an eon; existing across an indefinitely long or immeasurable period of time. Grounded in deep time.</p>
+    </div>
+
+    <div class="dict-entry" style="margin-bottom: 0;">
+      <h2 class="dict-word">Flourishing</h2>
+      <span class="dict-phonetics">/ˈflʌr.ɪ.ʃɪŋ/</span>
+      <span class="dict-type">noun</span>
+      <p class="dict-definition">1. The state of growing or developing in a healthy, vigorous, and highly favorable way. The realization of highest potential within an ecosystem.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section: Overview -->
+<section class="content-section" style="padding-bottom: 2rem;">
+  <div class="content-container">
+    <div class="text-entry" style="margin-top: 0; padding-top: 0;">
+      <h2 class="section-title">Aeonic Flourishing</h2>
+      <p class="medium-text">
+        A state of civilization designed to thrive in profound psychological well-being and ecological harmony across deep time. It represents a paradigm shift where technological advancement, natural systems, and classical wisdom converge to nurture human and non-human life indefinitely. We are transitioning from an era defined by short-term extraction and immediate survival into an epoch of enduring legacy. By designing our physical spaces and social structures to align with the rhythms of the earth, we forge a resilient culture capable of weathering the centuries. This is not a static utopia, but a dynamic, ever-evolving project of stewardship. It asks us to look beyond our own lifetimes, planting the seeds of monumental forests and philosophical frameworks that our descendants will inhabit. In this vision, technology ceases to be an alienating force and instead becomes the quiet, organic scaffolding that supports the highest expressions of art, culture, and biological vitality.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Mid Asterisk Divider -->
+<div class="asterisk-divider mid">***</div>
+
+<!-- Section: Breakdown Core Themes -->
+<section class="content-section" style="padding-top: 1rem; padding-bottom: 2rem;">
+  <div class="content-container">
+
+    <!-- Psychological -->
+    <div class="text-entry" style="margin-top: 0;">
+      <h2 class="medium-title">Psychological</h2>
+      <p class="medium-text">
+        Flourishing at the level of the mind requires dismantling the alienation and fragmented attention that define modern existence. It is about cultivating deep cognitive liberty, emotional resilience, and a profound sense of meaning. Rather than optimizing the human mind for ceaseless productivity, a psychological civilisation prioritizes holistic well-being, fostering spaces for both intense, directed focus and expansive, receptive rest. It recognizes that true contentment emerges from a balance of neurological states—from the heights of lucid creation to the restorative depths of subconscious wandering. By designing our social environments to support psychological safety and authentic connection, we dissolve the epidemic of isolation. Mental health is no longer viewed merely as the absence of illness, but as the active presence of vitality, curiosity, and a grounded sense of belonging within a larger cosmic and community narrative.
+      </p>
+    </div>
+
+    <!-- Ecological -->
+    <div class="text-entry">
+      <h2 class="medium-title">Ecological</h2>
+      <p class="medium-text">
+        To flourish ecologically is to recognize that human civilization is not separate from the biosphere, but a fully integrated participant within it. We must move decisively beyond the paradigm of extraction and domination, embracing a regenerative model where our cities and technologies function in seamless symbiosis with the natural world. This means constructing infrastructure inspired by biomimicry, where waste becomes food, and architecture acts as a living, breathing extension of the local environment. Urban centers transform into thriving ecosystems, draped in biodiversity, integrating terraced agriculture, and powered by clean, harmonious energy grids. An ecological civilisation closes the metabolic rift, ensuring that every act of human creation simultaneously heals and enriches the earth. We become a keystone species whose presence enhances the vitality, diversity, and resilience of the planetary web of life.
+      </p>
+    </div>
+    
+    <!-- Multi-Scale -->
+    <div class="text-entry">
+      <h2 class="medium-title">Multi-Scale</h2>
+      <p class="medium-text">
+        True flourishing cannot be isolated to the individual. It emanates outward through expanding spheres of moral consideration. By moving beyond instinctual nepotism, we recognize that psychological well-being is intrinsically linked to the health of our families, collectives, regions, and ultimately, our entire civilisation. The journey of multi-scale flourishing begins with a grounded self, but it refuses to stop there. As our capacity for empathy deepens, our circles of care widen, transforming self-interest into a profound sense of shared destiny. A healthy individual cannot truly thrive within a fractured family; a family cannot prosper in a degraded community; and a region cannot find balance within an ailing biosphere. Therefore, our ethical frameworks and civic infrastructures must be designed to nourish all scales simultaneously. It is a fractal approach to well-being, where the health of the microscopic reflects and supports the vitality of the macroscopic whole.
+      </p>
+    </div>
+
+    <!-- Full-Spectrum -->
+    <div class="text-entry">
+      <h2 class="medium-title">Full-Spectrum</h2>
+      <p class="medium-text">
+        Flourishing is not a single, narrow peak of perfection, but a vast and varied landscape of possibilities. Depending on our focus (internal vs. external) and our cognitive state (active vs. passive control), there are distinct quadrants of wellness and diverse expressions of psychological vibrancy waiting to be explored. A healthy civilization does not force its citizens into a monolithic mold of constant, outward-facing productivity. Instead, it recognizes the necessity of full-spectrum consciousness. We must honor the lucid, deliberate states required for deep work and innovation, just as deeply as we honor the receptive, floating states that birth our wildest dreams and intuition. From the hypnotic absorption of collective rituals to the sharp clarity of focused meditation, every quadrant of the human experience serves a vital purpose. By legitimizing and mapping this entire spectrum, we empower individuals to navigate their own unique terrains of flourishing, fully integrating the conscious and subconscious aspects of their minds.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Bottom Asterisks -->
+<div class="asterisk-divider bottom">***</div>
+
+<!-- Dark Mode Logic -->
+<script>
+  const themeBtn = document.getElementById('theme-toggle');
+  const iconSun = document.getElementById('icon-sun');
+  const iconMoon = document.getElementById('icon-moon');
+
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    if(document.body.classList.contains('dark-mode')) {
+      iconSun.style.display = 'block';
+      iconMoon.style.display = 'none';
+    } else {
+      iconSun.style.display = 'none';
+      iconMoon.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
